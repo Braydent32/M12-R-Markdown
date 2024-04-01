@@ -1,0 +1,79 @@
+---
+title: "StatCompare Package Documentation"
+author: "Brayden Tuel <Brayden.Tuel@example.com>"
+date: "2024-03-31"
+output: pdf_document
+---
+
+# Introduction
+
+The `StatCompare` package provides functions to conduct statistical tests for comparing multiple groups of data. This document outlines the main functions within the package along with their descriptions, inputs, outputs, and examples.
+
+## `compare_groups()`
+
+### Description
+
+The `compare_groups()` function performs a statistical test to evaluate whether there are significant differences among the population characteristics of multiple groups of data. It uses analysis of variance (ANOVA) to compare means across groups.
+
+### Inputs
+
+- **data**: A data frame where each column represents a different group to be compared.
+- **response_var**: The name of the response variable (dependent variable) to be analyzed.
+- **group_var**: The name of the grouping variable (independent variable) that identifies the different groups.
+- **...**: Additional arguments to be passed to the ANOVA function.
+
+### Outputs
+
+- **ANOVA table**: A summary of the analysis of variance results including F-statistic, p-value, and any other relevant statistics.
+
+### Example
+
+```R
+# Load StatCompare package
+library(StatCompare)
+
+# Create example data frame
+data <- data.frame(
+  group = rep(c("A", "B", "C"), each = 10),
+  value = c(rnorm(10, mean = 5), rnorm(10, mean = 6), rnorm(10, mean = 7))
+)
+
+# Perform comparison of groups
+result <- compare_groups(data = data, response_var = "value", group_var = "group")
+
+# View ANOVA table
+print(result)
+
+
+#Example
+# Perform post-hoc test
+posthoc_result <- posthoc_test(anova_result = result, method = "tukey")
+
+# View post-hoc test results
+print(posthoc_result)
+
+       comparison  p.adj
+1 A vs B  0.0343
+2 A vs C  0.0025
+3 B vs C  0.9893
+
+
+## `plot_compare()`
+
+### Description
+
+The `plot_compare()` function generates a plot to visually compare the means of different groups.
+
+### Inputs
+
+- **anova_result**: The result of the ANOVA analysis.
+
+### Outputs
+
+- **Plot**: A graphical representation of group means with error bars.
+
+### Example
+
+```R
+# Generate comparison plot
+plot_compare(anova_result = result)
